@@ -3,6 +3,5 @@ export default {
     description: 'ping',
     private: true,
     async run(interaction) {
-        console.log('pong')
     }
 }

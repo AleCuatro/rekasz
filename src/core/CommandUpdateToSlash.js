@@ -44,8 +44,7 @@ export default async function reloadCommandsUpdateToSlash() {
         return commands;
     }
 
-    const { private: privateCommands } = await commandUpdate();
-    const { global: globalCommands } = await commandUpdate();
+    const { private: privateCommands, global: globalCommands } = await commandUpdate();
     updatePrivate(privateCommands)
     updateGlobal(globalCommands)
 
