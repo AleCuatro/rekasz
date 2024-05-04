@@ -14,4 +14,4 @@ export type ButtonsNames =
     | 'socios'
     | 'noido'
 export type ModalNames = 'admins' | 'modalAlianza' | 'reportes' | 'modalSocio'
-export type MenuNames = 'ticketMenu'
+export type MenuNames = 'opciones'

@@ -9,6 +9,7 @@ import type {
 import type { ButtonsNames, ModalNames, CommandsNames, MessagesNames } from './Names'
 
 import { PermissionResolvable } from 'discord.js'
+import { StringSelectMenuBuilder } from 'discord.js'
 
 export interface BaseFileCommand extends BaseEventInteractionCreate {
     name: CommandsNames
@@ -31,9 +32,9 @@ export interface BaseFileButton extends BaseEventInteractionCreate {
 }
 
 export interface BaseFileMenu extends BaseEventInteractionCreate {
-    data: SelectMenuBuilder
     name: MenuNames
     type: 'menu'
+    data: StringSelectMenuBuilder
     execute: (interaction: CustomSelectMenuInteraction) => Promise<unknown>
 }
 

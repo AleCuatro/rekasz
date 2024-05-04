@@ -20,11 +20,8 @@ export default async function BuildCollection(pointFolder) {
                 const filePath = path.join(commandsPath, file);
                 const fileUrl = new URL(`file://${filePath}`);
                 const { default: command } = await import(fileUrl.href);// Dynamic import using await
-
-                if (validateCommand(command.default)) { // Assuming the exported command is the default export
-                    collection.set(command.default.name, command.default);
-                } else {
-                    console.log(`[WARNING] The command at ${filePath} is missing a required ${commandKeys} property.`);
+                if (validateCommand(command)) {
+                    collection.set(command.name, command)
                 }
             }
         }

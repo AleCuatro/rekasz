@@ -12,9 +12,8 @@ async function loadEvents(client) {
         for (const file of eventFiles) {
             const filePath = path.join(eventsPath, file);
             const fileUrl = new URL(`file://${filePath}`);
-            console.log(chalk.bgBlue('[Event]') + chalk.greenBright(` ${fileUrl.href}`))
             const { default: event } = await import(fileUrl.href);
-            console.log(chalk.bgBlue('[Event]') + chalk.greenBright(` ${event.name} online!`))
+            console.log(chalk.white('[ ') + chalk.hex('#9370DB')('EVENT') + chalk.white(' ]') + chalk.greenBright(` ${chalk.hex('#00FFFF')(event.name)} online!`))
 
             if (event.once) {
                 client.once(event.name, (...args) => event.execute(...args));
@@ -23,7 +22,10 @@ async function loadEvents(client) {
             }
         }
     } catch (error) {
-        console.error('Error reading or processing event files:', error);
+        if (error.message.includes("Cannot read properties of undefined")) {
+            const err = new Error(chalk.white('[ ') + chalk.hex('#9370DB')('ERR EVENT') + chalk.white(' ]') + chalk.greenBright(` ${chalk.hex('#00FFFF')('some event file is empty of otherwise variable the name this undefined!')}`))
+            console.log(err)
+        }
     }
 }
 

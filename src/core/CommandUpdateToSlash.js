@@ -2,10 +2,12 @@ import fs from 'fs'
 import 'dotenv/config'
 import path from 'path'
 import { REST, Routes } from 'discord.js'
-import servers from '../config/Guilds.js';
+import option from '../config/Guilds.js';
+const { guildId } = option
 import validateConf from '../config/validateConf.js';
-const { commandKeys, validateCommand } = validateConf
-console.log(servers)
+import chalk from 'chalk';
+const { validateCommand } = validateConf
+
 
 const rest = new REST().setToken(process.env.AccessToken)
 
@@ -35,13 +37,10 @@ export default async function reloadCommandsUpdateToSlash() {
                     } else {
                         commands.global.push(command);
                     }
-
-                } else {
-                    console.log(`[WARNING] The command at ${filePath} is missing a required ${commandKeys} property.`);
                 }
             }
+            return commands;
         }
-        return commands;
     }
 
     const { private: privateCommands, global: globalCommands } = await commandUpdate();
@@ -50,13 +49,13 @@ export default async function reloadCommandsUpdateToSlash() {
 
     async function updatePrivate(commands) {
         try {
-            console.log(`·  Private | Started | in | application (/) commands.`)
+            console.log(chalk.white('[ ') + chalk.hex('#ff5733')('PRIVATE') + chalk.white(' ]') + chalk.greenBright(`· Started | in | ${chalk.white('0')} | application  ${chalk.white('(/)')} commands.`))
             const data =
-                (await rest.put(Routes.applicationGuildCommands(process.env.id, '951839520247136296'), {
+                (await rest.put(Routes.applicationGuildCommands(process.env.id, guildId), {
                     body: commands
                 })) || []
 
-            console.log(`·  Private | Done | in  | ${data.length} application (/) commands.`)
+            console.log(chalk.white('[ ') + chalk.green('PRIVATE') + chalk.white(' ]') + chalk.greenBright(`· Done | in | ${chalk.white(data.length)} | application ${chalk.white('(/)')} commands.`))
         } catch (error) {
             console.error(error.rawError)
         }
@@ -65,13 +64,13 @@ export default async function reloadCommandsUpdateToSlash() {
 
     async function updateGlobal(commands) {
         try {
-            console.log(`·  Global | Started | in | application (/) commands.`)
+            console.log(chalk.white('[ ') + chalk.hex('#ff5733')('GLOBAL') + chalk.white(' ]') + chalk.greenBright(`· Started | in | ${chalk.white('0')} | application ${chalk.white('(/)')} commands.`))
             const data =
                 (await rest.put(Routes.applicationCommands(process.env.id), {
                     body: commands
                 })) || []
 
-            console.log(`·  Global | Done | in  | ${data.length} application (/) commands.`)
+            console.log(chalk.white('[ ') + chalk.green('GLOBAL') + chalk.white(' ]') + chalk.greenBright(`· Done | in | ${chalk.white(data.length)} | application ${chalk.white('(/)')} commands.`))
         } catch (error) {
             console.error(error.rawError)
         }
