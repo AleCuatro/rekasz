@@ -1,0 +1,32 @@
+{
+  "name": "rekasz",
+  "version": "15.0.6",
+  "description": "bot propio",
+  "main": "main.js",
+  "type": "module",
+  "scripts": {
+    "test": "node --watch main.js",
+    "dev": "node --run main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github/AleCuatro/rekasz-bot"
+  },
+  "keywords": [
+    "bot",
+    "discord",
+    "discordbot",
+    "nodejs",
+    "javascript"
+  ],
+  "engines": {
+    "node": ">=22.1.0"
+  },
+  "author": "AleCuatro",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "discord.js": "^14.14.1",
+    "dotenv": "^16.4.5"
+  }
+}
