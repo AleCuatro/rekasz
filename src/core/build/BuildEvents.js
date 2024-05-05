@@ -14,7 +14,6 @@ async function loadEvents(client) {
             const fileUrl = new URL(`file://${filePath}`);
             const { default: event } = await import(fileUrl.href);
             console.log(chalk.white('[ ') + chalk.hex('#9370DB')('EVENT') + chalk.white(' ]') + chalk.greenBright(` ${chalk.hex('#00FFFF')(event.name)} online!`))
-
             if (event.once) {
                 client.once(event.name, (...args) => event.execute(...args));
             } else {
@@ -24,6 +23,10 @@ async function loadEvents(client) {
     } catch (error) {
         if (error.message.includes("Cannot read properties of undefined")) {
             const err = new Error(chalk.white('[ ') + chalk.hex('#9370DB')('ERR EVENT') + chalk.white(' ]') + chalk.greenBright(` ${chalk.hex('#00FFFF')('some event file is empty of otherwise variable the name this undefined!')}`))
+            console.log(err)
+        }
+        if (error.message.includes("Cannot find module")) {
+            const err = new Error(chalk.white('[ ') + chalk.hex('#9370DB')('ERR EVENT') + chalk.white(' ]') + chalk.greenBright(` ${chalk.hex('#00FFFF')('some file dont import of the way correct the most probality is that missing extension .js or .ts!')}`))
             console.log(err)
         }
     }

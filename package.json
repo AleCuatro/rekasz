@@ -25,8 +25,10 @@
   "author": "AleCuatro",
   "license": "MIT",
   "dependencies": {
+    "@prisma/client": "^5.13.0",
     "chalk": "^5.3.0",
     "discord.js": "^14.15.1",
-    "dotenv": "^16.4.5"
+    "dotenv": "^16.4.5",
+    "prisma": "^5.13.0"
   }
 }

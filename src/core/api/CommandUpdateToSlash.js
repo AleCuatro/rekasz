@@ -2,9 +2,9 @@ import fs from 'fs'
 import 'dotenv/config'
 import path from 'path'
 import { REST, Routes } from 'discord.js'
-import option from '../config/Guilds.js';
+import option from '../../config/Guilds.js';
 const { guildId } = option
-import validateConf from '../config/validateConf.js';
+import validateConf from '../../config/validateConf.js';
 import chalk from 'chalk';
 const { validateCommand } = validateConf
 

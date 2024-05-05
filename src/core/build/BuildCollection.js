@@ -1,7 +1,7 @@
 import path from 'path'
 import fs from 'fs/promises'; // Using promises for async/await
 import { Collection } from 'discord.js';
-import validateConf from '../config/validateConf.js';
+import validateConf from '../../config/validateConf.js';
 const { commandKeys, validateCommand } = validateConf;
 
 export default async function BuildCollection(pointFolder) {
