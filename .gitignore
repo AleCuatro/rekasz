@@ -9,6 +9,7 @@ lerna-debug.log*
 
 # Commands / Events
 src/buttons/
+src/buttons/tickets/partners.js
 src/commands/
 src/events/
 src/menus/
