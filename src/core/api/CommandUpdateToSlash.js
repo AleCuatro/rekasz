@@ -30,7 +30,7 @@ export default async function reloadCommandsUpdateToSlash() {
                 const filePath = path.join(commandsPath, file);
                 const fileUrl = new URL(`file://${filePath}`);
                 const { default: command } = await import(fileUrl);
-
+                console.log(command)
                 if (validateCommand(command)) {
                     if (command.private) {
                         commands.private.push(command);
@@ -57,13 +57,14 @@ export default async function reloadCommandsUpdateToSlash() {
 
             console.log(chalk.white('[ ') + chalk.green('PRIVATE') + chalk.white(' ]') + chalk.greenBright(`· Done | in | ${chalk.white(data.length)} | application ${chalk.white('(/)')} commands.`))
         } catch (error) {
-            console.error(error.rawError)
+            console.error(error)
         }
 
     }
 
     async function updateGlobal(commands) {
         try {
+            console.log(commands)
             console.log(chalk.white('[ ') + chalk.hex('#ff5733')('GLOBAL') + chalk.white(' ]') + chalk.greenBright(`· Started | in | ${chalk.white('0')} | application ${chalk.white('(/)')} commands.`))
             const data =
                 (await rest.put(Routes.applicationCommands(process.env.id), {
@@ -72,7 +73,7 @@ export default async function reloadCommandsUpdateToSlash() {
 
             console.log(chalk.white('[ ') + chalk.green('GLOBAL') + chalk.white(' ]') + chalk.greenBright(`· Done | in | ${chalk.white(data.length)} | application ${chalk.white('(/)')} commands.`))
         } catch (error) {
-            console.error(error.rawError)
+            console.error(error)
         }
     }
 }

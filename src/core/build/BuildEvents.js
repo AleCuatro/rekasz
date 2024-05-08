@@ -29,6 +29,7 @@ async function loadEvents(client) {
             const err = new Error(chalk.white('[ ') + chalk.hex('#9370DB')('ERR EVENT') + chalk.white(' ]') + chalk.greenBright(` ${chalk.hex('#00FFFF')('some file dont import of the way correct the most probality is that missing extension .js or .ts!')}`))
             console.log(err)
         }
+        console.log(error)
     }
 }
 

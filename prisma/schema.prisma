@@ -10,7 +10,32 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Guild {
+  id            String          @id @unique
+  prefix        String          @default("a!")
+  ConfigPartner ConfigPartner[]
+}
+
+model ConfigPartner {
+  id               Int     @id @default(autoincrement())
+  guildID          String
+  partnerChannel   String?
+  affiliateChannel String?
+
+  Guild Guild? @relation(fields: [guildID], references: [id])
+}
+
 model User {
-  id   String @id @unique
-  coin Int    @default(0)
+  id      String    @id @unique
+  coin    Int       @default(0)
+  Partner Partner[]
+}
+
+model Partner {
+  id        Int    @id @default(autoincrement())
+  uid       String
+  sfwPoint  Int    @default(0)
+  nsfwPoint Int    @default(0)
+
+  User User? @relation(fields: [uid], references: [id])
 }

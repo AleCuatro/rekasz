@@ -17,4 +17,10 @@ export default class UserDB {
             })
         }
     }
+
+    async createPartner() {
+        const user = await db.user.findFirst({ where: { id: this.id } })
+        if (!user) return this.createUser()
+        await db.partner.create({ data: { uid: user.id } })
+    }
 }
