@@ -16,6 +16,8 @@ src/menus/
 src/messages/
 src/modals/
 prisma/schema.prisma
+prisma/dev.db
+prisma/migration/
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json

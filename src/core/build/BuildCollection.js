@@ -10,6 +10,8 @@ export default async function buildCollection(pointFolder) {
     const foldersPath = path.resolve('src', pointFolder);
 
     try {
+        await fs.mkdir(foldersPath, { recursive: true });
+
         const commandFolders = await fs.readdir(foldersPath);
 
         for (const folder of commandFolders) {

@@ -8,10 +8,12 @@ import reloadCommandsUpdateToSlash from './src/core/api/CommandUpdateToSlash.js'
 const permiso = GatewayIntentBits;
 const { ValidateError, handleUnhandledRejection } = err
 
+//? Si tu bot es solo de comando barra solo quita MessageContent 
 const client = new Client({
     intents: [permiso.GuildMessages, permiso.MessageContent, permiso.Guilds, permiso.GuildWebhooks, permiso.GuildMessageTyping],
 })
 
+//! Si no agregas las carpetas, no te preocupes estas se crearan automaticamente con el nombre que pusite.
 client.commands = await BuildCollection('commands')
 client.buttons = await BuildCollection('buttons')
 client.commandMessage = await BuildCollection('messages')
