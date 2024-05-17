@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,8 +7,15 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model TemporaryRole {
+  id        Int      @id @default(autoincrement())
+  userId    String
+  roleId    String
+  expiresAt DateTime
+}
+
 model Guild {
-  id            String          @id @unique
+  id            String          @id
   prefix        String          @default("a!")
   ConfigPartner ConfigPartner[]
 }
@@ -22,13 +26,7 @@ model ConfigPartner {
   partnerChannel   String?
   affiliateChannel String?
 
-  Guild Guild? @relation(fields: [guildID], references: [id])
-}
-
-model User {
-  id      String    @id @unique
-  coin    Int       @default(0)
-  Partner Partner[]
+  guild Guild @relation(fields: [guildID], references: [id])
 }
 
 model Partner {
@@ -37,5 +35,191 @@ model Partner {
   sfwPoint  Int    @default(0)
   nsfwPoint Int    @default(0)
 
-  User User? @relation(fields: [uid], references: [id])
+  user User @relation(fields: [uid], references: [id])
+}
+
+model User {
+  id        String     @id
+  coin      Int        @default(0)
+  level     Int        @default(0)
+  xp        Int        @default(0)
+  inventory Inventory?
+  partners  Partner[]
+}
+
+model Inventory {
+  id           Int           @id @default(autoincrement())
+  userId       String        @unique
+  user         User          @relation(fields: [userId], references: [id])
+  consumables  Consumable[]
+  collectibles Collectible[]
+  upgrades     Upgrade[]
+  tools        Tool[]
+  fishes       Fish[]
+  materials    Material[]
+  minerals     Mineral[]
+  buffs        Buff[]
+  keys         Key[]
+  loots        Loot[]
+  stoves       Stove[]
+  anvils       Anvil[]
+  foods        Food[]
+}
+
+model Consumable {
+  id          Int        @id @default(autoincrement())
+  name        String
+  description String?
+  inventoryId Int?
+  inventory   Inventory? @relation(fields: [inventoryId], references: [id])
+  lootItems   LootItem[]
+}
+
+model Collectible {
+  id          Int        @id @default(autoincrement())
+  name        String
+  description String?
+  inventoryId Int?
+  inventory   Inventory? @relation(fields: [inventoryId], references: [id])
+  lootItems   LootItem[]
+}
+
+model Upgrade {
+  id          Int        @id @default(autoincrement())
+  name        String
+  description String?
+  inventoryId Int?
+  inventory   Inventory? @relation(fields: [inventoryId], references: [id])
+}
+
+model Tool {
+  id          Int        @id @default(autoincrement())
+  name        String
+  description String?
+  inventoryId Int?
+  inventory   Inventory? @relation(fields: [inventoryId], references: [id])
+  lootItems   LootItem[]
+  recipes     Recipe[]
+}
+
+model Fish {
+  id          Int        @id @default(autoincrement())
+  name        String
+  description String?
+  inventoryId Int?
+  inventory   Inventory? @relation(fields: [inventoryId], references: [id])
+  lootItems   LootItem[]
+}
+
+model Material {
+  id          Int        @id @default(autoincrement())
+  name        String
+  description String?
+  inventoryId Int?
+  inventory   Inventory? @relation(fields: [inventoryId], references: [id])
+  lootItems   LootItem[]
+  recipes     Recipe[]   @relation(name: "MaterialRecipes")
+}
+
+model Mineral {
+  id          Int        @id @default(autoincrement())
+  name        String
+  description String?
+  inventoryId Int?
+  inventory   Inventory? @relation(fields: [inventoryId], references: [id])
+  lootItems   LootItem[]
+  recipes     Recipe[]   @relation(name: "MineralRecipes")
+}
+
+model Buff {
+  id          Int        @id @default(autoincrement())
+  name        String
+  description String?
+  inventoryId Int?
+  inventory   Inventory? @relation(fields: [inventoryId], references: [id])
+}
+
+model Key {
+  id          Int        @id @default(autoincrement())
+  name        String
+  description String?
+  inventoryId Int?
+  inventory   Inventory? @relation(fields: [inventoryId], references: [id])
+  lootItems   LootItem[]
+}
+
+model Loot {
+  id          Int        @id @default(autoincrement())
+  name        String
+  description String?
+  inventoryId Int?
+  inventory   Inventory? @relation(fields: [inventoryId], references: [id])
+  lootItems   LootItem[]
+}
+
+model LootItem {
+  id            Int          @id @default(autoincrement())
+  lootId        Int
+  loot          Loot         @relation(fields: [lootId], references: [id])
+  consumableId  Int?
+  collectibleId Int?
+  toolId        Int?
+  fishId        Int?
+  materialId    Int?
+  mineralId     Int?
+  keyId         Int?
+  probability   Float
+  consumable    Consumable?  @relation(fields: [consumableId], references: [id])
+  collectible   Collectible? @relation(fields: [collectibleId], references: [id])
+  tool          Tool?        @relation(fields: [toolId], references: [id])
+  fish          Fish?        @relation(fields: [fishId], references: [id])
+  material      Material?    @relation(fields: [materialId], references: [id])
+  mineral       Mineral?     @relation(fields: [mineralId], references: [id])
+  key           Key?         @relation(fields: [keyId], references: [id])
+}
+
+model Recipe {
+  id                 Int       @id @default(autoincrement())
+  name               String
+  description        String?
+  requiredMaterialId Int?
+  requiredMaterial   Material? @relation(name: "MaterialRecipes", fields: [requiredMaterialId], references: [id])
+  requiredFoodId     Int?
+  requiredFood       Food?     @relation(name: "FoodRecipes", fields: [requiredFoodId], references: [id])
+  requiredMineralId  Int?
+  requiredMineral    Mineral?  @relation(name: "MineralRecipes", fields: [requiredMineralId], references: [id])
+  requiredStoveId    Int?
+  requiredStove      Stove?    @relation(fields: [requiredStoveId], references: [id])
+  toolId             Int?
+  tool               Tool?     @relation(fields: [toolId], references: [id])
+  anvilId            Int?
+  anvil              Anvil?    @relation(fields: [anvilId], references: [id])
+  resultado          String?
+}
+
+model Stove {
+  id          Int        @id @default(autoincrement())
+  name        String
+  description String?
+  inventoryId Int?
+  inventory   Inventory? @relation(fields: [inventoryId], references: [id])
+  recipes     Recipe[]
+}
+
+model Anvil {
+  id          Int        @id @default(autoincrement())
+  name        String
+  description String?
+  inventoryId Int?
+  inventory   Inventory? @relation(fields: [inventoryId], references: [id])
+  recipes     Recipe[]
+}
+
+model Food {
+  id          Int        @id @default(autoincrement())
+  name        String
+  description String?
+  inventoryId Int?
+  inventory   Inventory? @relation(fields: [inventoryId], references: [id])
+  recipes     Recipe[]   @relation(name: "FoodRecipes")
 }

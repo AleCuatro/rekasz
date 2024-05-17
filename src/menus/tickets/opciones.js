@@ -1,9 +1,14 @@
-import { StringSelectMenuBuilder, StringSelectMenuOptionBuilder, PermissionsBitField, ActionRowBuilder, ModalBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
+import {
+    StringSelectMenuBuilder,
+    StringSelectMenuOptionBuilder,
+    PermissionsBitField,
+    ActionRowBuilder
+} from "discord.js";
 import BuildMenu from "../../core/schema/selectMenus.js";
 
 export default BuildMenu({
     name: 'opciones',
-    tysdfsdfpe: 'menu',
+    type: 'menu',
     data: new StringSelectMenuBuilder()
         .setCustomId('opciones')
         .setPlaceholder('Selecciona la opcion!')
@@ -24,35 +29,48 @@ export default BuildMenu({
      * @param {import('../../core/types/interactionTypes.js').CustomSelectMenuInteraction} interaction 
      */
     async execute(interaction) {
-
-        const value = interaction.values[0]
+        const value = interaction.values[0];
 
         switch (value) {
             case 'close':
                 if (!interaction.member?.permissions?.has(PermissionsBitField.Flags.ManageMessages || PermissionsBitField.Flags.Administrator)) {
-                    interaction.reply({
+                    await interaction.reply({
                         content: 'No eres moderador para usar este comando!',
                         ephemeral: true
-                    })
-                    return
+                    });
                 } else {
-                    return interaction.channel.delete()
+                    await interaction.reply({
+                        content: 'Cerrando el ticket...',
+                        ephemeral: true
+                    });
+                    await interaction.channel.delete();
                 }
+                break;
+
             case 'socio':
                 if (!interaction.member?.permissions?.has(PermissionsBitField.Flags.ManageMessages || PermissionsBitField.Flags.Administrator)) {
-                    interaction.reply({
+                    await interaction.reply({
                         content: 'No eres moderador para usar este comando!',
                         ephemeral: true
-                    })
+                    });
                 } else {
-                    let modal = interaction.client.modals.get('modalSocio')?.data
-                    return await interaction.showModal(modal);
+                    let modal = interaction.client.modals.get('modalSocio')?.data;
+                    await interaction.showModal(modal);
                 }
                 break;
 
             default:
-                return
+                await interaction.reply({
+                    content: 'Opción no válida!',
+                    ephemeral: true
+                });
                 break;
         }
+
+        // Actualizar el mensaje original para mantener el menú de selección disponible
+        await interaction.update({
+            components: [new ActionRowBuilder().addComponents(interaction.component)]
+        });
     }
-})
+});
+

@@ -1,11 +1,12 @@
-import { Client } from "discord.js"
-import type { BaseFileButton, BaseFileCommand, BaseFileMenu, BaseFileModal } from './BaseFiles'
-import type { MessagesNames, ButtonsNames, CommandsNames, ModalNames, MenuNames } from './Names'
+
+
+import { Client, Collection } from 'discord.js';
+import type { BaseFileButton, BaseFileCommand, BaseFileMenu, BaseFileModal, BaseFileMessage } from './BaseFiles';
 
 export interface ClientCustom extends Client {
-    commands: Collection<CommandsNames, BaseFileCommand>
-    buttons: Collection<ButtonsNames, BaseFileButton>
-    commandMessage: Collection<MessagesNames, BaseFileMessage>
-    modals: Collection<ModalNames, BaseFileModal>
-    menu: Collection<MenuNames, BaseFileMenu>
+    commands: Collection<string, BaseFileCommand<string>>;
+    buttons: Collection<string, BaseFileButton<string>>;
+    commandMessage: Collection<string, BaseFileMessage<string>>;
+    modals: Collection<string, BaseFileModal<string>>;
+    menu: Collection<string, BaseFileMenu<string>>;
 }

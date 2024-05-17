@@ -2,7 +2,7 @@ import path from 'path';
 import fs from 'fs';
 import chalk from 'chalk';
 
-const eventsPath = path.join(process.cwd(), 'src', 'events'); // Assuming events are in src/events
+const eventsPath = path.resolve('src', 'events'); // Uso de path.resolve para mayor claridad
 
 async function loadEvents(client) {
     try {
@@ -11,9 +11,13 @@ async function loadEvents(client) {
 
         for (const file of eventFiles) {
             const filePath = path.join(eventsPath, file);
-            const fileUrl = new URL(`file://${filePath}`);
-            const { default: event } = await import(fileUrl.href);
-            console.log(chalk.white('[ ') + chalk.hex('#9370DB')('EVENT') + chalk.white(' ]') + chalk.greenBright(` ${chalk.hex('#00FFFF')(event.name)} online!`))
+            const { default: event } = await import(`file://${filePath}`);
+
+            console.log(
+                chalk.white('[ ') + chalk.hex('#9370DB')('EVENT') + chalk.white(' ]') +
+                chalk.greenBright(` ${chalk.hex('#00FFFF')(event.name)} online!`)
+            );
+
             if (event.once) {
                 client.once(event.name, (...args) => event.execute(...args));
             } else {
@@ -21,15 +25,23 @@ async function loadEvents(client) {
             }
         }
     } catch (error) {
+        let errorMessage;
+
         if (error.message.includes("Cannot read properties of undefined")) {
-            const err = new Error(chalk.white('[ ') + chalk.hex('#9370DB')('ERR EVENT') + chalk.white(' ]') + chalk.greenBright(` ${chalk.hex('#00FFFF')('some event file is empty of otherwise variable the name this undefined!')}`))
-            console.log(err)
+            errorMessage = 'Some event file is empty or the event name is undefined!';
+        } else if (error.message.includes("Cannot find module")) {
+            errorMessage = 'Some file cannot be imported correctly, probably missing .js or .ts extension!';
+        } else {
+            errorMessage = error.message;
         }
-        if (error.message.includes("Cannot find module")) {
-            const err = new Error(chalk.white('[ ') + chalk.hex('#9370DB')('ERR EVENT') + chalk.white(' ]') + chalk.greenBright(` ${chalk.hex('#00FFFF')('some file dont import of the way correct the most probality is that missing extension .js or .ts!')}`))
-            console.log(err)
-        }
-        console.log(error)
+
+        const err = new Error(
+            chalk.white('[ ') + chalk.hex('#9370DB')('ERR EVENT') + chalk.white(' ]') +
+            chalk.greenBright(` ${chalk.hex('#00FFFF')(errorMessage)}`)
+        );
+
+        console.error(err);
+        console.error(error);
     }
 }
 
